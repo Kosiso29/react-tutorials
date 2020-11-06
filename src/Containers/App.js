@@ -1,24 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
-import Per from './Person/Person';
-import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
-//import Radium, { StyleRoot } from 'radium';
-//import styled from 'styled-components';
-
-// const StyledButton = styled.button`
-//   background-color: ${props => props.alt ? 'red' : 'green'};
-//   color: white;
-//   font: inherit;
-//   border: 1px solid blue;
-//   padding: 8px;
-
-//   &:hover {
-//     background-color: ${props => props.alt ? 'salmon' : 'lightgreen'};
-//     color: black;
-//   }
-// `
+import Persons from '../Components/Persons/Persons';
+import Cockpit from '../Components/Cockpit/Cockpit';
 
 class App extends Component {
+  constructor(props){
+    super(props);
+    console.log('[App.js] constructor');
+  }
 
   state = {
     persons: [
@@ -27,21 +16,31 @@ class App extends Component {
       { id: '3',name: 'Stephanie', age: 26}
     ],
     otherState: 'some other value',
-    showPersons: false
+    showPersons: false,
+    showCockpit: true
   }
 
+  static getDerivedStateFromProps(props, state) {
+    console.log('[App.js] getDerivedStateFromProps', props);
+    return state;
+  }
 
-  // switchNameHandler = (newName) => {
-  //   //console.log('Was clicked!');
-
-  //   this.setState({
-  //     persons: [
-  //       { name: newName, age: 28},
-  //       { name: 'Manu', age: 29},
-  //       { name: 'Stephanie', age: 27}
-  //     ]
-  //   })
+  // componentWillMount() {
+  //   console.log('[App.js] componentWillMount');
   // }
+
+  componentDidMount() {
+    console.log('[App.js] componentDidMount');
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+      console.log('{App.js] shouldComponentUpdate');
+      return true;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+      console.log('{App.js] componentDidUpdate');
+  }
 
   nameChangedHandler = (event, id) => {
     const personIndex = this.state.persons.findIndex(p => {
@@ -49,8 +48,6 @@ class App extends Component {
     });
 
     const person = {...this.state.persons[personIndex]};
-
-    //const person = Object.assign({}, this.state.persons[personIndex]);
 
     person.name = event.target.value;
     const persons = [...this.state.persons];
@@ -74,91 +71,25 @@ class App extends Component {
   }
 
   render() {
-
-    const style = {
-      backgroundColor: 'green',
-      color: 'white',
-      font: 'inherit',
-      'border': '1px solid blue',
-      padding: '8px',
-      ':hover': {
-        backgroundColor: 'lightgreen',
-        color: 'black'
-      }
-    };
+    console.log('[App.js] render');
 
     let persons = null;
     if(this.state.showPersons){
-      persons = (
-        <div>
-          {this.state.persons.map((person, index) => {
-            return <ErrorBoundary key={person.id}><Per click={() => this.deletePersonHandler(index)}
-                        name={person.name}
-                        age={person.age}
-                        changed={(event) => this.nameChangedHandler(event, person.id)} /></ErrorBoundary>
-          })}
-          {/* <Per 
-            name={this.state.persons[0].name} 
-            age={Math.floor(Math.random()*30)} />
-          <Per 
-            name={this.state.persons[1].name} 
-            age={this.state.persons[1].age}
-            click={this.switchNameHandler.bind(this, 'Max!')}
-            changed={this.nameChangedHandler}> And very hungry</Per>
-          <Per 
-            name={this.state.persons[2].name} 
-            age={this.state.persons[2].age} /> */}
-        </div>
-      );
-      style.backgroundColor = 'red';
-      style[':hover'] = {
-        backgroundColor: 'salmon',
-        color: 'black',
-      }
+      persons = 
+          <Persons persons={this.state.persons} clicked={this.deletePersonHandler} changed={this.nameChangedHandler}/>
     }
-
-    //let classes = ['red', 'bold'].join(' ');
-    const classes = [];
-    if (this.state.persons.length <= 2) {
-      classes.push('red'); //classes = ['red']
-    }
-
-    if (this.state.persons.length <= 1) {
-      classes.push('bold'); //classes = ['red', 'bold']
-    }
-
       return (
-        // <StyleRoot>
         <div className="App">
-          <hr></hr>
-          <p className={classes.join(' ')}>This is really working!</p>
-          {/* <button style={style} onClick={() => this.switchNameHandler('Maximilian')}>Switch Name</button><br/><br/> */}
-          <button style={style} onClick={() => this.togglePersonHandler()}>Toggle Person</button>
-          {/* <StyledButton alt={this.state.showPersons} onClick={() => this.togglePersonHandler()}>Toggle Person</StyledButton> */}
+          <button onClick={() => {
+            this.setState({ showCockpit: false });
+          }}>Remove Cockpit</button>
+          {this.state.showCockpit ? (
+          <Cockpit title={this.props.appTitle} showPersons={this.state.showPersons} personsLength={this.state.persons.length} clicked={this.togglePersonHandler} />
+          ) : null}
           {persons}
-          {
-            /*this.state.showPersons === true ?
-            <div>
-              <Per 
-                name={this.state.persons[0].name} 
-                age={Math.floor(Math.random()*30)} />
-              <Per 
-                name={this.state.persons[1].name} 
-                age={this.state.persons[1].age}
-                click={this.switchNameHandler.bind(this, 'Max!')}
-                changed={this.nameChangedHandler}> And very hungry</Per>
-              <Per 
-                name={this.state.persons[2].name} 
-                age={this.state.persons[2].age} />
-            </div> : null*/
-          }
         </div>
-        /* </StyleRoot> */
       );
-      // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
   }
 }
 
-
-
-export default /*Radium(App)*/ App;
+export default App;

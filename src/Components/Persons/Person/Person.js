@@ -1,5 +1,6 @@
-import React from 'react';
-import classes from './Person.module.css';
+import React, { Component } from 'react';
+import Aux from '../../../hoc/Auxiliary';
+//import classes from './Person.module.css';
 
 //import Radium from 'radium';
 ///import styled from 'styled-components';
@@ -18,27 +19,43 @@ import classes from './Person.module.css';
 //     }
 // `;
 
-const person = (props) => {
+class Person extends Component {
     // const style = {
     //     '@media (min-width: 500px)' : {
     //         width: '450px'
     //     }
     // }
-    const rnd = Math.random();
+    render() {
+
+        console.log('[Person.js] rendering...');
+    // const rnd = Math.random();
     
-        if (rnd > 0.7) {
-            throw new Error( 'Something went wrong' );
-            //console.log(rnd);
-        }
-    return (
-        <div className={classes.Pest} /*style={style}*/>
-        {/* <StyledDiv> */}
-            <p onClick={props.click}>I'm a {props.name} and I am {props.age} years old</p>
-            <p>{props.children}</p>
-            <input type="text" onChange={props.changed} value={props.name} />
-        {/* </StyledDiv> */}
-        </div>
-    );
+    //     if (rnd > 0.7) {
+    //         throw new Error( 'Something went wrong' );
+    //         //console.log(rnd);
+    //     }
+    // return (
+    //     <div className={classes.Pest} /*style={style}*/>
+    //     {/* <StyledDiv> */}
+    //         <p onClick={this.props.click}>I'm a {this.props.name} and I am {this.props.age} years old</p>
+    //         <p>{this.props.children}</p>
+    //         <input type="text" onChange={this.props.changed} value={this.props.name} />
+    //     {/* </StyledDiv> */}
+    //     </div>
+    // );
+//     return (<React.Fragment>
+//         <p key="1" onClick={this.props.click}>I'm a {this.props.name} and I am {this.props.age} years old</p>
+//         <p key='2'>{this.props.children}</p>
+//         <input key='3' type="text" onChange={this.props.changed} value={this.props.name} />
+//         </React.Fragment>);
+// }
+    return (<Aux>
+            <p key="1" onClick={this.props.click}>I'm a {this.props.name} and I am {this.props.age} years old</p>
+            <p key='2'>{this.props.children}</p>
+            <input key='3' type="text" onChange={this.props.changed} value={this.props.name} />
+            </Aux>);
+    }
+    
 };
 
-export default /*Radium(person)*/ person;
+export default /*Radium(person)*/ Person;
